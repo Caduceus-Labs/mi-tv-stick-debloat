@@ -102,3 +102,9 @@ Replacing `com.google.android.tvlauncher` (Projectivy / FLauncher) frees ~52 MB 
 - `adb connect` may hang on a stale IP — verify with ARP first; DHCP moves it.
 - Prefer `disable-user` over `pm uninstall --user 0` (uninstall is only restorable via `pm install-existing`).
 - Keep the device IP in `.env` (gitignored) — never commit it.
+
+## AI usage
+
+This repo was created with AI assistance (**Hermes Agent**, by Nous Research) during a live debugging session on a real Mi TV Stick. The human author directed the work, reviewed every change, and ran it on the device; the AI handled the ADB diagnosis, package classification, and script authoring. The before/after numbers in the table above are **real on-device measurements**, not estimates.
+
+Treat the package table as a starting point, not gospel — run `pm list packages` to confirm what's on *your* stick before disabling anything, and use `./scripts/undo.sh` if something misbehaves. All changes are reversible.
