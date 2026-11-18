@@ -92,8 +92,28 @@ Each script backs up the package list to `~/tvstick_backup_<timestamp>/` before 
 ### Never touch
 `mitv.service` (core), `com.xiaomi.mitv.res` (framework resources), `partnercustomizer` (persistent — can't kill without root anyway).
 
-## Optional: lighter launcher
-Replacing `com.google.android.tvlauncher` (Projectivy / FLauncher) frees ~52 MB + its 70% CPU bursts. Install the new launcher, set it as Home, then disable the old one.
+## Launcher swap (Projectivy) — biggest remaining win
+
+Replacing `com.google.android.tvlauncher` frees ~52 MB and its 70% CPU bursts. Reference device: load dropped 8.0 → 1.35, swap used 315 → 123 MB.
+
+```bash
+./scripts/launcher-swap.sh
+```
+
+The script opens Projectivy's **Play Store** page on the TV (install from there — **never** sideload from APK mirrors), then sets it as default Home, verifies, and disables the stock launcher. **Order matters:** set Projectivy as Home *before* disabling `tvlauncher`, or you get a blank Home screen.
+
+Manual steps if you prefer:
+
+```bash
+adb shell cmd package set-home-activity com.spocky.projengmenu/.ui.home.MainActivity
+adb shell cmd shortcut get-default-launcher        # verify
+adb shell pm disable-user --user 0 com.google.android.tvlauncher
+# undo:
+adb shell cmd package set-home-activity com.google.android.tvlauncher/.MainActivity
+adb shell pm enable com.google.android.tvlauncher
+```
+
+> Note: Projectivy does **not** self-set as Home on Android TV — you have to set it explicitly (above).
 
 ## Pitfalls
 - `pm disable-user` ≠ kill. Running processes persist until **reboot**.
